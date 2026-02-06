@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprint Retrospective</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .question-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .question-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .question-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .question-prompt {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .required {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+            color: white;
+        }
+        
+        .btn-admin {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+        
+        .summary-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .summary-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+        
+        .error-text {
+            color: #e53e3e;
+            margin-bottom: 15px;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .submission-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .emoji-btn {
+            font-size: 2em;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s;
+        }
+        
+        .emoji-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.2);
+        }
+        
+        .picker-modal {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 500px;
+        }
+        
+        .picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        const ADMIN_PASSCODE = '1028';
+        
+        const defaultQuestions = [
+            {
+                category: "What went well?",
+                prompt: "What aspects of the sprint were successful? What should we continue doing?",
+                icon: "✓",
+                allowEmojis: true,
+                required: false
+            },
+            {
+                category: "What didn't go well?",
+                prompt: "What challenges did we face? What obstacles slowed us down?",
+                icon: "⚠",
+                allowEmojis: true,
+                required: false
+            },
+            {
+                category: "What can we improve?",
+                prompt: "What specific changes could make our next sprint better?",
+                icon: "↑",
+                allowEmojis: true,
+                required: false
+            },
+            {
+                category: "Action items",
+                prompt: "What concrete steps will we take based on today's discussion?",
+                icon: "→",
+                allowEmojis: true,
+                required: true
+            }
+        ];
+
+        const emojis = ['👍', '👎', '🎉', '💡', '🚀', '⭐', '✅', '❌', '🔥', '💪', '🎯', '📈', '📉', '⚠️', '🤔', '😊', '😕', '💯', '🏆', '🙌', '👏', '🤝', '💼', '📊', '⏰', '🎨', '🔧', '🛠️', '📝', '✨'];
+
+        class RetroApp {
+            constructor() {
+                this.mode = 'user';
+                this.currentQuestion = 0;
+                this.answers = [];
+                this.questions = this.loadQuestions();
+                this.submissions = this.loadSubmissions();
+                this.isAdmin = false;
+                this.editingQuestions = [...this.questions];
+                this.initAnswers();
+                this.render();
+            }
+
+            initAnswers() {
+                this.answers = new Array(this.questions.length).fill('');
+            }
+
+            loadQuestions() {
+                const saved = localStorage.getItem('retro-questions');
+                return saved ? JSON.parse(saved) : defaultQuestions;
+            }
+
+            loadSubmissions() {
+                const saved = localStorage.getItem('retro-submissions');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            saveQuestions() {
+                localStorage.setItem('retro-questions', JSON.stringify(this.questions));
+            }
+
+            saveSubmissions() {
+                localStorage.setItem('retro-submissions', JSON.stringify(this.submissions));
+            }
+
+            nextQuestion() {
+                const current = this.questions[this.currentQuestion];
+                if (current.required && !this.answers[this.currentQuestion].trim()) {
+                    alert('This question is required!');
+                    return;
+                }
+
+                if (this.currentQuestion < this.questions.length - 1) {
+                    this.currentQuestion++;
+                    this.render();
+                } else {
+                    this.mode = 'summary';
+                    this.render();
+                }
+            }
+
+            prevQuestion() {
+                if (this.currentQuestion > 0) {
+                    this.currentQuestion--;
+                    this.render();
+                }
+            }
+
+            submitRetro() {
+                const submission = {
+                    id: Date.now(),
+                    timestamp: new Date().toISOString(),
+                    answers: [...this.answers],
+                    questions: [...this.questions]
+                };
+                this.submissions.push(submission);
+                this.saveSubmissions();
+                alert('Submitted anonymously!');
+                this.reset();
+            }
+
+            reset() {
+                this.currentQuestion = 0;
+                this.initAnswers();
+                this.mode = 'user';
+                this.render();
+            }
+
+            showAdminModal() {
+                document.getElementById('adminModal').classList.add('active');
+            }
+
+            checkAdminPassword() {
+                const input = document.getElementById('adminPassword');
+                if (input.value === ADMIN_PASSCODE) {
+                    this.isAdmin = true;
+                    this.mode = 'admin';
+                    document.getElementById('adminModal').classList.remove('active');
+                    input.value = '';
+                    document.getElementById('adminError').classList.add('hidden');
+                    this.render();
+                } else {
+                    document.getElementById('adminError').classList.remove('hidden');
+                    input.value = '';
+                }
+            }
+
+            logout() {
+                this.isAdmin = false;
+                this.mode = 'user';
+                this.render();
+            }
+
+            showEmojiPicker() {
+                document.getElementById('emojiModal').classList.add('active');
+            }
+
+            insertEmoji(emoji) {
+                this.answers[this.currentQuestion] += emoji;
+                document.getElementById('answerInput').value = this.answers[this.currentQuestion];
+                document.getElementById('emojiModal').classList.remove('active');
+            }
+
+            exportResults() {
+                let text = '=== SPRINT RETROSPECTIVE ===\n\n';
+                text += `Date: ${new Date().toLocaleDateString()}\n\n`;
+                
+                this.questions.forEach((q, idx) => {
+                    text += `${q.category}\n`;
+                    text += `${'-'.repeat(q.category.length)}\n`;
+                    text += `${this.answers[idx] || '(No response)'}\n\n`;
+                });
+
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `sprint-retro-${new Date().toISOString().split('T')[0]}.txt`;
+                a.click();
+            }
+
+            clearAllData() {
+                if (confirm('Clear all submissions?')) {
+                    this.submissions = [];
+                    this.saveSubmissions();
+                    this.render();
+                }
+            }
+
+            render() {
+                const app = document.getElementById('app');
+                
+                if (this.mode === 'admin' && this.isAdmin) {
+                    app.innerHTML = this.renderAdmin();
+                } else if (this.mode === 'summary') {
+                    app.innerHTML = this.renderSummary();
+                } else {
+                    app.innerHTML = this.renderQuestion();
+                }
+
+                this.attachEventListeners();
+            }
+
+            renderQuestion() {
+                const q = this.questions[this.currentQuestion];
+                const progress = ((this.currentQuestion + 1) / this.questions.length) * 100;
+
+                return `
+                    <div class="container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h1>Sprint Retrospective ✨</h1>
+                            <button class="btn-admin" onclick="app.showAdminModal()">👁️ Admin</button>
+                        </div>
+                        
+                        <div style="text-align: right; margin-bottom: 10px; color: #667eea; font-weight: bold;">
+                            Question ${this.currentQuestion + 1} of ${this.questions.length}
+                        </div>
+                        
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+
+                        <div class="question-box">
+                            <div class="question-icon">${q.icon}</div>
+                            <div class="question-title">
+                                ${q.category}
+                                ${q.required ? '<span class="required">*</span>' : ''}
+                            </div>
+                            <div class="question-prompt">
+                                ${q.prompt}
+                                ${q.required ? '<span class="required">(Required)</span>' : ''}
+                            </div>
+                        </div>
+
+                        <textarea 
+                            id="answerInput" 
+                            placeholder="Share your thoughts here... ✍️"
+                            onchange="app.answers[${this.currentQuestion}] = this.value"
+                        >${this.answers[this.currentQuestion]}</textarea>
+
+                        ${q.allowEmojis ? '<button class="btn-secondary" onclick="app.showEmojiPicker()" style="margin-top: 15px;">😊 Add Emoji</button>' : ''}
+
+                        <div class="button-container">
+                            <button 
+                                class="btn-secondary" 
+                                onclick="app.prevQuestion()"
+                                ${this.currentQuestion === 0 ? 'disabled' : ''}
+                            >← Previous</button>
+                            
+                            <button class="btn-secondary" onclick="app.reset()">Reset</button>
+                            
+                            <button class="btn-primary" onclick="app.nextQuestion()">
+                                ${this.currentQuestion === this.questions.length - 1 ? '🎉 Finish' : 'Next →'}
+                            </button>
+                        </div>
+                    </div>
+
+                    ${this.renderAdminModal()}
+                    ${this.renderEmojiModal()}
+                `;
+            }
+
+            renderSummary() {
+                return `
+                    <div class="container">
+                        <div style="text-align: center; margin-bottom: 40px;">
+                            <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
+                            <h1>Amazing Work!</h1>
+                            <p style="color: #666; font-size: 1.2em;">Here's your retrospective summary</p>
+                        </div>
+
+                        ${this.questions.map((q, idx) => `
+                            <div class="summary-box">
+                                <div class="summary-title">${q.icon} ${q.category}</div>
+                                <p>${this.answers[idx] || '<em style="color: #999;">(No response)</em>'}</p>
+                            </div>
+                        `).join('')}
+
+                        <div class="button-container">
+                            <button class="btn-success" onclick="app.submitRetro()">👥 Submit Anonymously</button>
+                            <button class="btn-primary" onclick="app.exportResults()">💾 Export</button>
+                            <button class="btn-secondary" onclick="app.reset()">🔄 Start Over</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderAdmin() {
+                return `
+                    <div class="container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                            <h1>Admin Dashboard</h1>
+                            <button class="btn-secondary" onclick="app.logout()">Logout</button>
+                        </div>
+
+                        <div class="admin-stats">
+                            <div class="stat-card">
+                                <div class="stat-number">${this.submissions.length}</div>
+                                <div class="stat-label">Total Submissions</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">${this.questions.length}</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">${this.submissions.length > 0 ? new Date(this.submissions[this.submissions.length - 1].timestamp).toLocaleDateString() : 'N/A'}</div>
+                                <div class="stat-label">Last Submission</div>
+                            </div>
+                        </div>
+
+                        <button class="btn-secondary" onclick="app.clearAllData()" style="margin: 20px 0;">🗑️ Clear All Data</button>
+
+                        <h2 style="margin: 30px 0 20px 0;">All Submissions (Anonymous)</h2>
+
+                        ${this.submissions.length === 0 ? 
+                            '<p style="text-align: center; color: #999; padding: 40px;">No submissions yet.</p>' :
+                            this.submissions.map((sub, idx) => `
+                                <div class="submission-card">
+                                    <div class="submission-header">
+                                        <strong>Submission #${idx + 1}</strong>
+                                        <span style="color: #999;">${new Date(sub.timestamp).toLocaleString()}</span>
+                                    </div>
+                                    ${sub.questions.map((q, qIdx) => `
+                                        <div class="summary-box">
+                                            <div class="summary-title">${q.icon} ${q.category}</div>
+                                            <p>${sub.answers[qIdx] || '<em style="color: #999;">(No response)</em>'}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                `;
+            }
+
+            renderAdminModal() {
+                return `
+                    <div id="adminModal" class="modal">
+                        <div class="modal-content">
+                            <h2>👁️ Admin Access</h2>
+                            <p style="margin-bottom: 20px; color: #666;">Enter the admin passcode</p>
+                            <input 
+                                type="password" 
+                                id="adminPassword" 
+                                placeholder="Enter passcode"
+                                onkeypress="if(event.key === 'Enter') app.checkAdminPassword()"
+                            />
+                            <p id="adminError" class="error-text hidden">❌ Incorrect passcode</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn-success" onclick="app.checkAdminPassword()" style="flex: 1;">Enter</button>
+                                <button class="btn-secondary" onclick="document.getElementById('adminModal').classList.remove('active')">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderEmojiModal() {
+                return `
+                    <div id="emojiModal" class="modal">
+                        <div class="picker-modal">
+                            <div class="picker-header">
+                                <h3>😊 Pick an Emoji</h3>
+                                <button class="close-btn" onclick="document.getElementById('emojiModal').classList.remove('active')">✕</button>
+                            </div>
+                            <div class="emoji-grid">
+                                ${emojis.map(emoji => `
+                                    <button class="emoji-btn" onclick="app.insertEmoji('${emoji}')">${emoji}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            attachEventListeners() {
+                // Event listeners are handled via onclick attributes
+            }
+        }
+
+        const app = new RetroApp();
+    </script>
+</body>
+</html>
