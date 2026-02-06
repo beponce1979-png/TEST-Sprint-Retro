@@ -306,33 +306,50 @@
         const defaultQuestions = [
             {
                 category: "What went well?",
-                prompt: "What aspects of the sprint were successful? What should we continue doing?",
+                prompt: "What team achievements from the last sprint stand out to be proud of?",
                 icon: "✓",
                 allowEmojis: true,
-                required: false
+                required: true
             },
             {
-                category: "What didn't go well?",
+                category: "What was the biggest source of stress or difficulty during the previous sprint?",
                 prompt: "What challenges did we face? What obstacles slowed us down?",
                 icon: "⚠",
                 allowEmojis: true,
-                required: false
+                required: true
             },
             {
-                category: "What can we improve?",
+                category: "What can we do as a team to make sure our sprints are successful?",
                 prompt: "What specific changes could make our next sprint better?",
                 icon: "↑",
                 allowEmojis: true,
-                required: false
+                required: true
             },
             {
-                category: "Action items",
+                category: "How motivated do you feel to do your best work? (Place your favorite Emoji in this column)",
                 prompt: "What concrete steps will we take based on today's discussion?",
                 icon: "→",
                 allowEmojis: true,
                 required: true
-            }
-        ];
+            },
+            {
+                
+            category: "What’s something fun or interesting you did outside of work during the last sprint?",
+                prompt: "Anything exciting or memorable ?",
+                icon: "?",
+                allowEmojis: true,
+                required: true
+             },
+            {
+                
+            category: "What are your thoughts going into the next sprint?",
+                prompt: "",
+                icon: "+",
+                allowEmojis: true,
+                required: true
+                 }
+            
+
 
         const emojis = ['👍', '👎', '🎉', '💡', '🚀', '⭐', '✅', '❌', '🔥', '💪', '🎯', '📈', '📉', '⚠️', '🤔', '😊', '😕', '💯', '🏆', '🙌', '👏', '🤝', '💼', '📊', '⏰', '🎨', '🔧', '🛠️', '📝', '✨'];
 
